@@ -71,7 +71,7 @@ function check_download {
 
     if [ ! -d "${FRIX_CONFIG_PATH}" ]; then
         echo "[DOWNLOAD] Downloading Klippain repository..."
-        if git -C $frixtemppath clone https://github.com/Frix-x/klippain.git $frixreponame; then
+        if git -C $frixtemppath clone https://github.com/jurikaur/klippain.git $frixreponame; then
             chmod +x ${FRIX_CONFIG_PATH}/install.sh
             printf "[DOWNLOAD] Download complete!\n\n"
         else
