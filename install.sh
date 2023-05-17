@@ -22,6 +22,8 @@ USER_CONFIG_PATH="${HOME}/printer_data/config"
 FRIX_CONFIG_PATH="${HOME}/klippain_config"
 # Path used to store backups when updating (backups are automatically dated when saved inside)
 BACKUP_PATH="${HOME}/klippain_config_backups"
+# Where the Klipper folder is located (ie. the internal Klipper firmware machinery)
+KLIPPER_PATH="${HOME}/klipper"
 
 
 set -eu
@@ -128,6 +130,9 @@ function install_config {
         chmod +x ${FRIX_CONFIG_PATH}/scripts/$file
     done
 
+    # Symlink the gcode_shell_command.py file in the correct Klipper folder (erased to always get the last version)
+    ln -fsn ${FRIX_CONFIG_PATH}/scripts/gcode_shell_command.py ${KLIPPER_PATH}/klippy/extras
+
     # Create or update the config version tracking file in the user config directory
     git -C ${FRIX_CONFIG_PATH} rev-parse HEAD > ${USER_CONFIG_PATH}/.VERSION
 }
@@ -221,7 +226,8 @@ function install_mcu_templates {
             # If the user selected a file, copy its content into the mcu.cfg file
             filename=$(basename "${file_list[$((ercf_template-1))]}")
             cat "${FRIX_CONFIG_PATH}/user_templates/mcu_defaults/ercf/$filename" >> ${USER_CONFIG_PATH}/mcu.cfg
-            printf "[CONFIG] Template '$filename' inserted into your mcu.cfg user file\n\n"
+            echo "[CONFIG] Template '$filename' inserted into your mcu.cfg user file"
+            printf "[CONFIG] You must install ERCF Happy Hare from https://github.com/moggieuk/ERCF-Software-V3 to use ERCF with Klippain\n\n"
         else
             printf "[CONFIG] No ERCF template selected. Skip and continuing...\n\n"
         fi
